@@ -6,9 +6,13 @@ enum Bit {
   Batsu
 };
 
-enum Turn {
-  Sente,
+enum Turn { Sente,
   Gote
+};
+
+struct Move {
+  int i;
+  int j;
 };
 
 class Board {
@@ -24,11 +28,14 @@ class Board {
       }
       turn = Sente;
     }
-};
 
-struct Move {
-  int i;
-  int j;
+    void switchTurn() {
+      if (turn == Sente) {
+        turn = Gote;
+      } else {
+        turn = Sente;
+      }
+    }
 };
 
 void clear() {
@@ -38,6 +45,7 @@ void clear() {
 }
 
 void printBoard(Board board) {
+  /* TODO: pretty print Japanese */
   std::cout << "Turn: ";
   switch (board.turn) {
     case Sente:
@@ -48,7 +56,13 @@ void printBoard(Board board) {
   }
   std::cout << "\n";
 
+  /* column numbers for moves */
+  std::cout << "  123\n";
+  std::cout << "  ---\n";
+
   for (int i = 0; i < 3; i++) {
+    /* row numbers for moves */
+    std::cout << i << "|";
     for (int j = 0; j < 3; j++) {
       switch (board.bitBoard[i][j]) {
         case Empty:
@@ -62,30 +76,51 @@ void printBoard(Board board) {
           break;
       }
     }
+
     /* must stack rows */
     std::cout << "\n";
   }
 }
 
-Move askMove() {
-  Move move;
-
+bool canPlayMove(Board& board) {
+  Move move; 
   std::cout << "Enter row: ";
-  std::cin >> move.j;
-
-  std::cout << "Enter column: ";
   std::cin >> move.i;
 
-  return move;
-}
+  std::cout << "Enter column: ";
+  std::cin >> move.j;
 
+  move.i -= 1;
+  move.j -= 1;
+
+  if (board.bitBoard[move.i][move.j] != Empty) {
+    return false;
+  } else {
+
+    switch (board.turn) {
+      case Sente:
+        board.bitBoard[move.i][move.j] = Maru;
+        break;
+      case Gote:
+        board.bitBoard[move.i][move.j] = Batsu;
+        break;
+    }
+
+    return true;
+  }
+}
 
 int main() {
   Board gameBoard;
 
-  clear();
-  printBoard(gameBoard);
-
+  while(true) {
+    clear();
+    printBoard(gameBoard);
+    while (!canPlayMove(gameBoard)) {
+      std::cout << "Illegal move. Please try again.\n";
+    }
+    gameBoard.switchTurn();
+  }
 
   return 0;
 }
