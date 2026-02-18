@@ -78,10 +78,10 @@ void printBoard(Board board) {
           std::cout << "＊";
           break;
         case Maru:
-          std::cout << "⭕️";
+          std::cout << "Ｏ";
           break;
         case Batsu:
-          std::cout << "❌️";
+          std::cout << "Ｘ";
           break;
       }
     }
