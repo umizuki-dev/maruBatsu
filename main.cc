@@ -61,8 +61,8 @@ void printBoard(Board board) {
   std::cout << "  ---\n";
 
   for (int i = 0; i < 3; i++) {
-    /* row numbers for moves */
-    std::cout << i << "|";
+    /* row number for moves is one more than index */
+    std::cout << i + 1 << "|";
     for (int j = 0; j < 3; j++) {
       switch (board.bitBoard[i][j]) {
         case Empty:
@@ -110,15 +110,58 @@ bool canPlayMove(Board& board) {
   }
 }
 
+bool isMate(Board board) {
+  /* horizontal search */
+  for (int i = 0; i < 3; i++) {
+    if (board.bitBoard[i][0] == board.bitBoard[i][1] && board.bitBoard[i][1] == board.bitBoard[i][2] && board.bitBoard[i][0] != Empty) {
+      return true;
+    }
+  }
+
+  /* vertical search */
+  for (int i = 0; i < 3; i++) {
+    if (board.bitBoard[0][i] == board.bitBoard[1][i] && board.bitBoard[1][i] == board.bitBoard[2][i] && board.bitBoard[0][i] != Empty) {
+      return true;
+    }
+  }
+
+  /* diagonal search */
+  if (board.bitBoard[0][0] == board.bitBoard[1][1] && board.bitBoard[1][1] == board.bitBoard[2][2] && board.bitBoard[0][0] != Empty) {
+    return true;
+  }
+  if (board.bitBoard[0][2] == board.bitBoard[1][1] && board.bitBoard[1][1] == board.bitBoard[2][0] && board.bitBoard[0][2] != Empty) {
+    return true;
+  }
+
+  return false;
+}
+
+
 int main() {
   Board gameBoard;
 
   while(true) {
     clear();
     printBoard(gameBoard);
+
     while (!canPlayMove(gameBoard)) {
       std::cout << "Illegal move. Please try again.\n";
     }
+
+    if (isMate(gameBoard)) {
+
+      switch (gameBoard.turn) {
+        case Sente:
+          std::cout << "Sente wins.\n";
+          break;
+        case Gote:
+          std::cout << "Gote wins.\n";
+          break;
+      }
+
+      return 0;
+    }
+
     gameBoard.switchTurn();
   }
 
