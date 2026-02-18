@@ -1,12 +1,11 @@
 #include <iostream>
 
 enum Bit {
-  Empty,
-  Maru,
-  Batsu
+  Empty, Maru, Batsu
 };
 
-enum Turn { Sente,
+enum Turn {
+  Sente,
   Gote
 };
 
@@ -45,34 +44,44 @@ void clear() {
 }
 
 void printBoard(Board board) {
-  /* TODO: pretty print Japanese */
-  std::cout << "Turn: ";
+  std::cout << "手番：";
   switch (board.turn) {
     case Sente:
-      std::cout << "Sente";
+      std::cout << "先手";
       break;
     case Gote:
-      std::cout << "Gote";
+      std::cout << "後手";
   }
-  std::cout << "\n";
+
+  std::cout << "\n＝＝＝＝＝\n\n";
 
   /* column numbers for moves */
-  std::cout << "  123\n";
-  std::cout << "  ---\n";
+  std::cout << "　　１２３\n";
+  std::cout << "　　ーーー\n";
 
   for (int i = 0; i < 3; i++) {
-    /* row number for moves is one more than index */
-    std::cout << i + 1 << "|";
+    switch (i) {
+      case 0:
+        std::cout << "１｜";
+        break;
+      case 1:
+        std::cout << "２｜";
+        break;
+      case 2:
+        std::cout << "３｜";
+        break;
+    }
+
     for (int j = 0; j < 3; j++) {
       switch (board.bitBoard[i][j]) {
         case Empty:
-          std::cout << "*";
+          std::cout << "＊";
           break;
         case Maru:
-          std::cout << "O";
+          std::cout << "⭕️";
           break;
         case Batsu:
-          std::cout << "X";
+          std::cout << "❌️";
           break;
       }
     }
@@ -80,14 +89,15 @@ void printBoard(Board board) {
     /* must stack rows */
     std::cout << "\n";
   }
+  std::cout << "\n＝＝＝＝＝\n\n";
 }
 
 bool canPlayMove(Board& board) {
   Move move; 
-  std::cout << "Enter row: ";
+  std::cout << "移動先の行を入力してください: ";
   std::cin >> move.i;
 
-  std::cout << "Enter column: ";
+  std::cout << "移動先の列を入力してください: ";
   std::cin >> move.j;
 
   move.i -= 1;
@@ -138,6 +148,7 @@ bool isMate(Board board) {
 
 
 int main() {
+  int moveCount = 0;
   Board gameBoard;
 
   while(true) {
@@ -145,17 +156,17 @@ int main() {
     printBoard(gameBoard);
 
     while (!canPlayMove(gameBoard)) {
-      std::cout << "Illegal move. Please try again.\n";
+      std::cout << "別の手を選択してください\n";
     }
 
     if (isMate(gameBoard)) {
-
+      std::cout << "まで" << moveCount << "手で";
       switch (gameBoard.turn) {
         case Sente:
-          std::cout << "Sente wins.\n";
+          std::cout << "先手の勝ち\n";
           break;
         case Gote:
-          std::cout << "Gote wins.\n";
+          std::cout << "後手の勝ち\n";
           break;
       }
 
@@ -163,6 +174,7 @@ int main() {
     }
 
     gameBoard.switchTurn();
+    moveCount += 1;
   }
 
   return 0;
