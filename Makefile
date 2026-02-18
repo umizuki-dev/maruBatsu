@@ -1,5 +1,10 @@
-maruBatsu: main.cc
-	g++ main.cc -o maruBatsu -Wall -Werror -pedantic -std=c++20 -O2
+CXX = g++
+CXXFLAGS = -std=c++20 -Wall -Werror -pedantic -O2
+SRC = main.cc
+TARGET = maruBatsu
+
+$(TARGET): $(SRC)
+	$(CXX) $(CXXFLAGS) $(SRC) -o $(TARGET)
 
 clean:
-	rm maruBatsu
+	rm -f $(TARGET)
