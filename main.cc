@@ -55,7 +55,7 @@ void printBoard(Board board) {
 
   std::cout << "\n＝＝＝＝＝\n\n";
 
-  /* column numbers for moves */
+  /*列番号を表示*/
   std::cout << "　　１２３\n";
   std::cout << "　　ーーー\n";
 
@@ -86,7 +86,7 @@ void printBoard(Board board) {
       }
     }
 
-    /* must stack rows */
+    /*行ごとに改行する*/
     std::cout << "\n";
   }
   std::cout << "\n＝＝＝＝＝\n\n";
